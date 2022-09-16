@@ -5,6 +5,7 @@
 import sqlite3
 import json
 import pandas as pd
+import csv
 
 # 所有topic
 '''['_Fusion_SafetyFunc_ObstacleFramePart@0', '_VAL_Lidar_0_PointCloud@0', '_VAL_Radar_SGU_Objects@0', 
@@ -36,14 +37,16 @@ def read_data_from_sqlite(data_path , save_path , topic_list):
             for data in cursor.execute("select %s from %s" % (table_cols ,'{1}{0}{1}'.format(str(table_name[0]),"'"))):
                 # print(type(data))
                 try:
+                    
                     js = json.loads(data[0])
-                    # print(js)
+                    js = json.dumps(js)
+                    # print(js["timestamp"])
                     
                     data_pd = data_pd.append([[js]])
                 except:
                     print("data is wrong!")
             data_pd.columns = [topic_name]
-            data_pd.to_csv( save_path + str(topic_name) + ".csv")
+            data_pd.to_csv( save_path + str(topic_name) + ".csv" , quoting=csv.QUOTE_NONE , escapechar ='\x20' , index=None)
 
     cursor.close()  # 关闭句柄
     dbc.close()  # 关闭数据连接
@@ -53,13 +56,13 @@ def read_data_from_sqlite(data_path , save_path , topic_list):
 
 if __name__ == '__main__':
 
-    # data_path = './test_data/json_recording/rti_recorder_default.dat'
-    # save_path = "./test_data/"
-    # data_path = './AEB_data/rti_recorder_default_converted.dat'
-    # save_path = "./AEB_data/"
-    data_path = './predict_data/rti_recorder_default_converted.dat'
-    save_path = "./predict_data/"
-    topic_list = ['Perception_LaneLine','Perception_CameraObstacles']
-    topic_list =['_viz_fusion_fused_objects_interpolated']
+    # data_path = './data/test_data/json_recording/rti_recorder_default.dat'
+    # save_path = "./data/test_data/"
+    # data_path = './data/AEB_data/rti_recorder_default_converted.dat'
+    # save_path = "./data/AEB_data/"
+    data_path = './data/predict_data/rti_recorder_default_converted.dat'
+    save_path = "./data/predict_data/"
+    # topic_list = ['Perception_LaneLine','Perception_CameraObstacles' , 'Perception_LidarObstacles']
+    topic_list =['_viz_prediction_pred_obstacles']
     read_data_from_sqlite(data_path , save_path , topic_list)
     
