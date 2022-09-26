@@ -10,6 +10,7 @@ import logging
 from typing import Dict, List, Tuple
 
 import numpy as np
+import re 
 
 class ObstacleType(Enum):
     VISION = 1
@@ -36,9 +37,11 @@ class PredictObstacle(object):
         self.id_time = None 
         self.timestamp: int = int(float(obstacle_info["stamp"])*1000)
         self.label: float = obstacle_info["label"]
+        self.cutin_adc: int = None
         self.position_x: float = obstacle_info["pose"]["position"]["x"]
         self.position_y: float = obstacle_info["pose"]["position"]["y"]
         self.obstacle_type: int = obstacle_info['type']
+        
     
     def get_id_time(self):
         if len(self.id_info) !=  0:
@@ -46,6 +49,14 @@ class PredictObstacle(object):
             if  id_time in ['1s' , '2s' , '3s']:
                 self.id , self.id_time = id , id_time
                 # return 
+
+    def get_cutin_adc(self):
+        # cutin_flag = self.label.split(' ')
+        cutin_flag = re.split(r"[ ]+", self.label)
+        if 'is_cutin_adc:0' in cutin_flag :
+            self.cutin_adc = 0 
+        elif 'is_cutin_adc:1' in cutin_flag:
+            self.cutin_adc = 1
 
 
 class SyncPredictObstacle(object):     
