@@ -5,7 +5,7 @@ from predictobstacle import PredictObstacle
 from predictobstacle import SyncPredictObstacle
 import queue
 
-data_path = "/Users/panjiqing/Desktop/licode/data/predict_data/_viz_prediction_pred_obstacles.csv"
+data_path = "/Users/panjiqing/Desktop/licode/data/predict_data/new/_viz_prediction_pred_obstacles.csv"
 
 # data = pd.read_csv(data_path ,  error_bad_lines=False)
 # print(data)
@@ -49,7 +49,7 @@ with open(data_path, 'r',encoding='utf-8-sig') as f:
                     print('sync_id: ', syncobs.sync_id)
                     if syncobs.sync_id not in label_dict.keys():
                         label_dict[syncobs.sync_id] = queue.Queue(maxsize)
-                    print(label_dict[syncobs.sync_id].qsize())
+                    print("length of queue:" , label_dict[syncobs.sync_id].qsize())
                     if label_dict[syncobs.sync_id].qsize() == maxsize:
                         label_dict[syncobs.sync_id].get()
                     label_dict[syncobs.sync_id].put(syncobs)

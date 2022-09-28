@@ -22,6 +22,7 @@ import csv
 
 def read_data_from_sqlite(data_path , save_path , topic_list):
     
+    
     dbc = sqlite3.connect(data_path)    # 连接数据库
     cursor = dbc.cursor()   # 建立游标
 
@@ -60,9 +61,10 @@ if __name__ == '__main__':
     # save_path = "./data/test_data/"
     # data_path = './data/AEB_data/rti_recorder_default_converted.dat'
     # save_path = "./data/AEB_data/"
-    data_path = './data/predict_data/rti_recorder_default_converted.dat'
-    save_path = "./data/predict_data/"
+    data_path = '/Users/panjiqing/Desktop/licode/data/parking_data/rti_recorder_default.dat'
+    save_path = "/Users/panjiqing/Desktop/licode/data/parking_data/"
     # topic_list = ['Perception_LaneLine','Perception_CameraObstacles' , 'Perception_LidarObstacles']
-    topic_list =['_viz_prediction_pred_obstacles']
+    # topic_list =['_viz_prediction_pred_obstacles']
+    topic_list = ['rt_parking_raw']
     read_data_from_sqlite(data_path , save_path , topic_list)
     

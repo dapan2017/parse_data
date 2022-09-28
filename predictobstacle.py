@@ -46,7 +46,7 @@ class PredictObstacle(object):
     def get_id_time(self):
         if len(self.id_info) !=  0:
             id , id_time = self.id_info.rsplit("_",1)[0],self.id_info.rsplit("_",1)[1]
-            if  id_time in ['1s' , '2s' , '3s']:
+            if  id_time in ['0s', '1s' , '2s' , '3s']:
                 self.id , self.id_time = id , id_time
                 # return 
 
@@ -69,6 +69,7 @@ class SyncPredictObstacle(object):
             mode: insert obstacle mode, eg: predicted, ground_truth
         """ 
         self.obs_number = obs_number
+        self.sync_pred_obs_zero = None
         self.sync_pred_obs_one = None
         self.sync_pred_obs_two = None
         self.sync_pred_obs_three = None
@@ -77,6 +78,8 @@ class SyncPredictObstacle(object):
 
     def add_predict_obs(self,predictobs):
         if predictobs.id_time =='1s':
+            self.sync_pred_obs_zero = predictobs
+        if predictobs.id_time =='1s':
             self.sync_pred_obs_one = predictobs
         if predictobs.id_time =='2s':
             self.sync_pred_obs_two = predictobs
@@ -84,14 +87,14 @@ class SyncPredictObstacle(object):
             self.sync_pred_obs_three = predictobs
 
     def get_sync_timestamp(self):
-        if self.sync_pred_obs_one.timestamp == self.sync_pred_obs_two.timestamp \
+        if self.sync_pred_obs_zero.timestamp == self.sync_pred_obs_one.timestamp == self.sync_pred_obs_two.timestamp \
          == self.sync_pred_obs_three.timestamp:
             self.sync_timestamp = self.sync_pred_obs_one.timestamp
         else :
             pass
 
     def get_sync_id(self):
-        if self.sync_pred_obs_one.id == self.sync_pred_obs_two.id \
+        if self.sync_pred_obs_zero.id == self.sync_pred_obs_one.id == self.sync_pred_obs_two.id \
          == self.sync_pred_obs_three.id:
             self.sync_id = self.sync_pred_obs_one.id
         else :
